@@ -1,0 +1,74 @@
+import React, {useState} from "react";
+import api from "../utils/api.ts";
+import {useNavigate} from "react-router-dom";
+import {
+    Container,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    Alert
+} from "@mui/material";
+import type {AxiosError} from "axios";
+import { Link as RouterLink } from "react-router-dom";
+import { Link } from "@mui/material";
+import {useAuth} from "../context/AuthContext.tsx";
+
+
+const LoginPage = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const { setToken } = useAuth();
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const resp = await api.post("/auth/login", {email, password});
+            setToken(resp.data.token);
+            navigate("/");
+        } catch (e) {
+            const err = e as AxiosError<{ message?: string }>;
+            setError(err.response?.data?.message || "Error with login request");
+        }
+    };
+
+    return (
+        <Container maxWidth="xs">
+            <Box sx={{mt: 8, display: "flex", flexDirection: "column", gap: 2}}>
+                <Typography variant="h4" align="center">Logowanie</Typography>
+
+                {error && <Alert severity="error">{error}</Alert>}
+
+                <TextField
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                />
+
+                <TextField
+                    label="Hasło"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    fullWidth
+                />
+
+                <Button variant="contained" color="primary" onClick={handleLogin} fullWidth>
+                    Zaloguj się
+                </Button>
+                <Typography align="center" sx={{ mt: 2 }}>
+                    Nie posiadasz konta?{" "}
+                    <Link component={RouterLink} to="/register">
+                        Utwórz konto
+                    </Link>
+                </Typography>
+            </Box>
+        </Container>
+    );
+};
+
+export default LoginPage;
