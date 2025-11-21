@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Card,
     CardActionArea,
@@ -9,52 +8,54 @@ import {
     Box,
     Button,
 } from '@mui/material';
-import { People, Euro } from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { People } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import type { AvailableRoomType } from '../../models/AvailableRoomType';
+import { formatRoomName, getRoomImage } from "../../utils/room.utils.ts";
 
 interface Props {
     room: AvailableRoomType;
-    totalPrice: number;   // ← nowa propka!
-    nights: number;       // ← ile nocy
+    totalPrice: number;
+    nights: number;
+    from: string;
+    to: string;
 }
 
-export default function AvailableRoomCard({ room, totalPrice, nights }: Props) {
+export default function AvailableRoomCard({ room, totalPrice, nights, from, to }: Props) {
     const navigate = useNavigate();
-    const location = useLocation();
-
-    // Przekazujemy daty dalej do rezerwacji
-    const searchParams = new URLSearchParams(location.search);
-    const from = searchParams.get('from');
-    const to = searchParams.get('to');
 
     const handleReserve = () => {
-        navigate(`/reservations/${room.id}?from=${from}&to=${to}`);
+        navigate(`/reservations/create/${room.id}`, {
+            state: {
+                from,
+                to,
+                roomType: room,        // cały obiekt pokoju – najważniejsze!
+            },
+        });
     };
 
     return (
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardActionArea onClick={handleReserve}>
                 <CardMedia
-                    component="div"
+                    component="img"
+                    height="240"
+                    image={getRoomImage(room.name, room.capacity)}
+                    alt={formatRoomName(room.name, room.capacity)}
                     sx={{
-                        height: 240,
-                        backgroundImage: `ur[](https://source.unsplash.com/random/800x600/?hotel,${room.name.toLowerCase().replace(/\s+/g, '-')})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        objectFit: 'cover',
+                        borderRadius: '12px 12px 0 0',
                     }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h6" fontWeight="bold" gutterBottom>
-                        {room.name}
+                        {formatRoomName(room.name, room.capacity)}
                     </Typography>
-
                     {room.description && (
                         <Typography variant="body2" color="text.secondary" paragraph>
                             {room.description}
                         </Typography>
                     )}
-
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', my: 2 }}>
                         <Chip icon={<People />} label={`${room.capacity} osób`} size="small" />
                         {room.amenities.slice(0, 3).map((a) => (
@@ -65,7 +66,6 @@ export default function AvailableRoomCard({ room, totalPrice, nights }: Props) {
                         )}
                     </Box>
 
-                    {/* Ceny */}
                     <Box sx={{ mt: 3 }}>
                         <Typography variant="body2" color="text.secondary">
                             Cena za noc:
@@ -73,7 +73,6 @@ export default function AvailableRoomCard({ room, totalPrice, nights }: Props) {
                         <Typography variant="h5" fontWeight="bold" color="primary">
                             {room.pricePerNight.toFixed(0)} zł
                         </Typography>
-
                         <Box sx={{ mt: 2, p: 2, bgcolor: 'primary.50', borderRadius: 2 }}>
                             <Typography variant="body2" fontWeight="medium">
                                 {nights} {nights === 1 ? 'noc' : nights < 5 ? 'noce' : 'nocy'}

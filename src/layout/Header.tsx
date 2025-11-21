@@ -15,7 +15,7 @@ import {
     Login as LoginIcon,
     PersonAdd as RegisterIcon,
 } from '@mui/icons-material';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext.tsx';
 import { useNavigate } from 'react-router-dom';
 
 function HideOnScroll({ children }: { children: React.ReactElement }) {

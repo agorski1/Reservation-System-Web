@@ -1,3 +1,4 @@
+// src/components/room/RoomTypeDetails.tsx
 import {
     Box,
     Button,
@@ -8,6 +9,8 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
+    Card,
+    CardMedia,
 } from '@mui/material';
 import {
     ArrowBack as ArrowBackIcon,
@@ -17,6 +20,7 @@ import {
 } from '@mui/icons-material';
 import type { RoomType } from '../../models/RoomType';
 import { useNavigate } from 'react-router-dom';
+import { formatRoomName, getRoomImage } from "../../utils/room.utils.ts";
 
 interface RoomTypeDetailsProps {
     room: RoomType;
@@ -27,7 +31,6 @@ export default function RoomTypeDetails({ room }: RoomTypeDetailsProps) {
 
     return (
         <Box>
-            {/* Przycisk Wróć */}
             <Button
                 startIcon={<ArrowBackIcon />}
                 onClick={() => navigate(-1)}
@@ -36,47 +39,44 @@ export default function RoomTypeDetails({ room }: RoomTypeDetailsProps) {
                 ← Wróć do listy
             </Button>
 
-            <Grid container spacing={6}>
-                {/* Zdjęcie pokoju */}
-                <Grid item xs={12} md={6}>
-                    <Box
-                        sx={{
-                            height: { xs: 300, md: 520 },
-                            borderRadius: 4,
-                            overflow: 'hidden',
-                            boxShadow: 12,
-                            backgroundImage: `url(https://source.unsplash.com/random/1200x800/?hotel,${room.name
-                                .toLowerCase()
-                                .replace(/\s+/g, '-')})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
-                    />
+            <Grid container spacing={6} component="div">
+                <Grid size={{ xs: 12, md: 6 }} component="div">
+                    <Card elevation={10} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+                        <CardMedia
+                            component="img"
+                            height="520"
+                            image={getRoomImage(room.name, room.capacity)}
+                            alt={formatRoomName(room.name, room.capacity)}
+                            sx={{
+                                objectFit: 'cover',
+                            }}
+                        />
+                    </Card>
                 </Grid>
 
-                {/* Szczegóły */}
-                <Grid item xs={12} md={6}>
+                {/* Opis i szczegóły */}
+                <Grid size={{ xs: 12, md: 6 }} component="div">
                     <Typography variant="h3" fontWeight="bold" gutterBottom>
-                        {room.name}
+                        {formatRoomName(room.name, room.capacity)}
                     </Typography>
 
-                    <Box sx={{ display: 'flex', gap: 2, my: 3 }}>
+                    <Box sx={{ display: 'flex', gap: 2, my: 3, flexWrap: 'wrap' }}>
                         <Chip
                             icon={<People />}
-                            label={`${room.capacity} osób`}
+                            label={`${room.capacity} ${room.capacity === 1 ? 'osoba' : 'osoby'}`}
                             color="primary"
-                            size="large"
+                            size="medium"
+                            sx={{ fontSize: '1rem', py: 2.5 }}
                         />
                         <Chip
                             icon={<Euro />}
-                            label={`${room.pricePerNight} zł/noc`}
+                            label={`${room.pricePerNight} zł / noc`}
                             color="success"
-                            size="large"
-                            sx={{ fontWeight: 'bold' }}
+                            size="medium"
+                            sx={{ fontWeight: 'bold', fontSize: '1rem', py: 2.5 }}
                         />
                     </Box>
 
-                    {/* Opis */}
                     {room.description && (
                         <>
                             <Typography variant="h5" sx={{ mt: 6, mb: 2 }}>
@@ -88,10 +88,10 @@ export default function RoomTypeDetails({ room }: RoomTypeDetailsProps) {
                         </>
                     )}
 
-                    {/* Udogodnienia */}
                     <Typography variant="h5" sx={{ mt: 6, mb: 2 }}>
                         Udogodnienia
                     </Typography>
+
                     <List>
                         {room.amenities.length > 0 ? (
                             room.amenities.map((amenity, index) => (
@@ -109,7 +109,6 @@ export default function RoomTypeDetails({ room }: RoomTypeDetailsProps) {
                         )}
                     </List>
 
-                    {/* Przycisk rezerwacji */}
                     <Button
                         variant="contained"
                         size="large"

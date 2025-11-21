@@ -5,6 +5,7 @@ import {
 import { People, Euro } from '@mui/icons-material';
 import type { RoomType } from '../../models/RoomType';
 import { useNavigate } from 'react-router-dom';
+import {formatRoomName, getRoomImage} from "../../utils/room.utils.ts";
 
 interface Props {
     room: RoomType;
@@ -26,11 +27,13 @@ export default function RoomTypeCard({ room }: Props) {
         >
             <CardActionArea onClick={() => navigate(`/room-types/${room.id}`)}>
                 <CardMedia
-                    component="div"
+                    component="img"
+                    height={240}
+                    image={getRoomImage(room.name, room.capacity)}
+                    alt={formatRoomName(room.name, room.capacity)}
                     sx={{
-                        height: 240,
-                        backgroundImage: `ur[](https://source.unsplash.com/random/800x600/?hotel,${room.name.toLowerCase()})`,
-                        backgroundSize: 'cover',
+                        objectFit: 'cover',
+                        borderRadius: '12px 12px 0 0',
                     }}
                 />
                 <CardContent>

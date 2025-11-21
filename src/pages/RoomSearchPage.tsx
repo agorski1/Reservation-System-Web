@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/pages/RoomSearchPage.tsx
+import { useState } from 'react';
 import {
     Container,
     Grid,
@@ -10,35 +11,36 @@ import {
 } from '@mui/material';
 import DateRangeFilter from '../components/filters/DateRangeFilter';
 import PriceRangeFilter from '../components/filters/PriceRangeFilter';
-import AmenitiesAndGuestsFilter from '../components/filters/AmenitiesAndGuestsFilter';
+import GuestsFilter from '../components/filters/GuestsFilter';
+import AmenitiesFilter from '../components/filters/AmenitiesFilter';
 import AvailableRoomCard from '../components/room/AvailableRoomCard';
 import { useQuery } from '@tanstack/react-query';
 import { getAvailableRoomTypes } from '../services/roomTypesService';
-import { calculateNights, calculateTotalPrice } from '../utils/date';
+import { calculateNights } from '../utils/date';
 
 export default function RoomSearchPage() {
     const [from, setFrom] = useState<string>('');
     const [to, setTo] = useState<string>('');
     const [minPrice, setMinPrice] = useState<string>('');
     const [maxPrice, setMaxPrice] = useState<string>('');
-    const [guests, setGuests] = useState<number>(2);
+    const [selectedGuests, setSelectedGuests] = useState<number[]>([]);
     const [amenities, setAmenities] = useState<string[]>([]);
 
     const nights = calculateNights(from, to);
 
     const { data: rooms = [], isLoading } = useQuery({
-        queryKey: ['availableRooms', { from, to, minPrice, maxPrice, guests, amenities }],
+        queryKey: ['availableRooms', { from, to, minPrice, maxPrice, selectedGuests, amenities }],
         queryFn: () =>
             getAvailableRoomTypes({
-                from: from || undefined,
-                to: to || undefined,
-                capacity: guests ? [guests] : undefined,
+                from,
+                to,
+                capacity: selectedGuests.length > 0 ? selectedGuests : undefined,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
                 amenities: amenities.length > 0 ? amenities : undefined,
             }),
         enabled: !!from && !!to && nights > 0,
-        staleTime: 1000 * 60 * 5, // 5 minut cache
+        staleTime: 1000 * 60 * 5,
     });
 
     return (
@@ -47,10 +49,10 @@ export default function RoomSearchPage() {
                 Wyszukaj pokój
             </Typography>
 
-            <Grid container spacing={4}>
-                {/* === LEWA KOLUMNA – FILTRY === */}
-                <Grid item xs={12} md={4}>
-                    <Paper sx={{ p: 4, position: 'sticky', top: 100, alignSelf: 'start' }}>
+            <Grid container spacing={4} component="div">
+                {/* Filtry */}
+                <Grid size={{ xs: 12, md: 4 }} component="div">
+                    <Paper elevation={3} sx={{ p: 4, position: 'sticky', top: 100 }}>
                         <DateRangeFilter
                             from={from}
                             to={to}
@@ -60,7 +62,6 @@ export default function RoomSearchPage() {
                             }}
                         />
                         <Divider sx={{ my: 4 }} />
-
                         <PriceRangeFilter
                             min={minPrice}
                             max={maxPrice}
@@ -70,18 +71,20 @@ export default function RoomSearchPage() {
                             }}
                         />
                         <Divider sx={{ my: 4 }} />
-
-                        <AmenitiesAndGuestsFilter
-                            guests={guests}
+                        <GuestsFilter
+                            selectedGuests={selectedGuests}
+                            onGuestsChange={setSelectedGuests}
+                        />
+                        <Divider sx={{ my: 4 }} />
+                        <AmenitiesFilter
                             selectedAmenities={amenities}
-                            onGuestsChange={setGuests}
                             onAmenitiesChange={setAmenities}
                         />
                     </Paper>
                 </Grid>
 
-                {/* === PRAWA KOLUMNA – WYNIKI === */}
-                <Grid item xs={12} md={8}>
+                {/* Lista pokoi */}
+                <Grid size={{ xs: 12, md: 8 }} component="div">
                     {isLoading ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', my: 10 }}>
                             <CircularProgress size={70} />
@@ -93,20 +96,22 @@ export default function RoomSearchPage() {
                             </Typography>
                         </Paper>
                     ) : (
-                        <Grid container spacing={4}>
-                            {rooms.map((room) => {
-                                const totalPrice = calculateTotalPrice(room.pricePerNight, nights);
-
-                                return (
-                                    <Grid item xs={12} sm={6} lg={4} key={room.id}>
-                                        <AvailableRoomCard
-                                            room={room}
-                                            totalPrice={totalPrice}
-                                            nights={nights}
-                                        />
-                                    </Grid>
-                                );
-                            })}
+                        <Grid container spacing={4} component="div">
+                            {rooms.map((room) => (
+                                <Grid
+                                    key={room.id}
+                                    size={{ xs: 12, sm: 6, lg: 4 }}
+                                    component="div"
+                                >
+                                    <AvailableRoomCard
+                                        room={room}
+                                        totalPrice={room.pricePerNight * nights}
+                                        nights={nights}
+                                        from={from}
+                                        to={to}
+                                    />
+                                </Grid>
+                            ))}
                         </Grid>
                     )}
                 </Grid>
