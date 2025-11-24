@@ -11,6 +11,7 @@ import RoomTypeDetailsPage from '../pages/RoomTypeDetailsPage';
 import ReservationsPage from '../pages/ReservationsPage';
 import MyReservationsPage from '../pages/MyReservationsPage';
 import CreateReservationPage from '../pages/CreateReservationPage';
+import PaymentPage from "../pages/PaymentPage.tsx";
 
 export default function AppRoutes() {
     return (
@@ -28,7 +29,7 @@ export default function AppRoutes() {
                 path="/reservations/create/:roomTypeId"
                 element={
                     <PrivateRoute>
-                        <CreateReservationPage />
+                        <CreateReservationPage/>
                     </PrivateRoute>
                 }
             />
@@ -46,6 +47,15 @@ export default function AppRoutes() {
                 element={
                     <PrivateRoute>
                         <MyReservationsPage/>
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="/payment/:reservationId"
+                element={
+                    <PrivateRoute>
+                        <PaymentPage />
                     </PrivateRoute>
                 }
             />
