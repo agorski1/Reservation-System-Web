@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -25,6 +25,13 @@ export default function MyReservationsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('active');
   const queryClient = useQueryClient();
 
+  const refreshAllReservations = () => {
+    queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    queryClient.invalidateQueries({ queryKey: ['myReservations', 'active'] });
+    queryClient.invalidateQueries({ queryKey: ['myReservations', 'all'] });
+    queryClient.invalidateQueries({ queryKey: ['reservation'] });
+  };
+
   const {
     data: reservations = [],
     isLoading,
@@ -32,12 +39,16 @@ export default function MyReservationsPage() {
   } = useQuery<UserReservation[]>({
     queryKey: ['myReservations', viewMode],
     queryFn: viewMode === 'active' ? getMyCurrentReservations : getMyReservations,
+    staleTime: 1000 * 30,
   });
 
   const cancelMutation = useMutation({
     mutationFn: cancelReservation,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      refreshAllReservations();
+    },
+    onError: () => {
+      alert('Nie udało się anulować rezerwacji. Spróbuj ponownie.');
     },
   });
 
@@ -46,6 +57,15 @@ export default function MyReservationsPage() {
       cancelMutation.mutate(id);
     }
   };
+
+  useEffect(() => {
+    const handleFocus = () => {
+      refreshAllReservations();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [queryClient, refreshAllReservations]);
 
   if (isLoading) {
     return (
@@ -56,7 +76,11 @@ export default function MyReservationsPage() {
   }
 
   if (error) {
-    return <Alert severity="error" sx={{ m: 4 }}>Nie udało się załadować rezerwacji.</Alert>;
+    return (
+      <Alert severity="error" sx={{ m: 4 }}>
+        Nie udało się załadować rezerwacji. Spróbuj odświeżyć stronę.
+      </Alert>
+    );
   }
 
   return (
