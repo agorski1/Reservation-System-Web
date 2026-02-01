@@ -29,7 +29,7 @@ export default function AvailableRoomCard({ room, totalPrice, nights, from, to }
             state: {
                 from,
                 to,
-                roomType: room,        // cały obiekt pokoju – najważniejsze!
+                roomType: room,
             },
         });
     };

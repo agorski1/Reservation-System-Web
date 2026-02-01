@@ -1,4 +1,3 @@
-// src/components/payment/PaymentSummary.tsx
 import { Paper, Typography, Button, TextField, Box } from '@mui/material';
 import type { UserReservation } from '../../models/UserReservation';
 

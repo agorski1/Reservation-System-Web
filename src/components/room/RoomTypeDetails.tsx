@@ -1,4 +1,3 @@
-// src/components/room/RoomTypeDetails.tsx
 import {
     Box,
     Button,

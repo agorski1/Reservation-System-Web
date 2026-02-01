@@ -1,4 +1,3 @@
-// src/pages/RoomSearchPage.tsx
 import { useState } from 'react';
 import {
     Container,
@@ -26,7 +25,17 @@ export default function RoomSearchPage() {
     const [selectedGuests, setSelectedGuests] = useState<number[]>([]);
     const [amenities, setAmenities] = useState<string[]>([]);
 
-    const nights = calculateNights(from, to);
+    const isDateValid = () => {
+    if (!from || !to) return false;
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) return false;
+    if (fromDate >= toDate) return false;
+    return true;
+}
+
+
+    const nights = isDateValid() ? calculateNights(from, to) : 0;
 
     const { data: rooms = [], isLoading } = useQuery({
         queryKey: ['availableRooms', { from, to, minPrice, maxPrice, selectedGuests, amenities }],
@@ -39,7 +48,7 @@ export default function RoomSearchPage() {
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
                 amenities: amenities.length > 0 ? amenities : undefined,
             }),
-        enabled: !!from && !!to && nights > 0,
+        enabled: isDateValid(),
         staleTime: 1000 * 60 * 5,
     });
 
@@ -83,9 +92,15 @@ export default function RoomSearchPage() {
                     </Paper>
                 </Grid>
 
-                {/* Lista pokoi */}
                 <Grid size={{ xs: 12, md: 8 }} component="div">
-                    {isLoading ? (
+
+                    {!isDateValid() ? (
+                        <Paper sx={{ p: 8, textAlign: 'center', bgcolor: 'grey.50' }}>
+                            <Typography variant="h6" color="error">
+                                Proszę wprowadzić poprawny zakres dat (data "od" musi być wcześniejsza niż "do").
+                            </Typography>
+                        </Paper>
+                    ) : isLoading ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', my: 10 }}>
                             <CircularProgress size={70} />
                         </Box>
@@ -98,11 +113,7 @@ export default function RoomSearchPage() {
                     ) : (
                         <Grid container spacing={4} component="div">
                             {rooms.map((room) => (
-                                <Grid
-                                    key={room.id}
-                                    size={{ xs: 12, sm: 6, lg: 4 }}
-                                    component="div"
-                                >
+                                <Grid key={room.id} size={{ xs: 12, sm: 6, lg: 4 }} component="div">
                                     <AvailableRoomCard
                                         room={room}
                                         totalPrice={room.pricePerNight * nights}
@@ -114,6 +125,7 @@ export default function RoomSearchPage() {
                             ))}
                         </Grid>
                     )}
+
                 </Grid>
             </Grid>
         </Container>

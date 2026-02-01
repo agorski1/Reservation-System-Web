@@ -7,7 +7,7 @@ export default function Footer() {
             <Container maxWidth="lg">
                 <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
-                        Hotel Paradise
+                        Hotel
                     </Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', gap: 3, mb: 4 }}>
@@ -27,8 +27,8 @@ export default function Footer() {
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
                             <EmailIcon fontSize="small" />
-                            <Link href="mailto:recepcja@hotelparadise.pl" color="inherit" underline="none">
-                                recepcja@hotelparadise.pl
+                            <Link href="mailto:recepcja@hotel.pl" color="inherit" underline="none">
+                                recepcja@hotel.pl
                             </Link>
                         </Box>
                     </Box>
@@ -36,7 +36,7 @@ export default function Footer() {
                     <Divider sx={{ bgcolor: 'grey.700', width: { xs: '100%', sm: 400 }, mx: 'auto', my: 3 }} />
 
                     <Typography variant="body2" color="grey.500">
-                        © {new Date().getFullYear()} Hotel Paradise. Wszystkie prawa zastrzeżone.
+                        © {new Date().getFullYear()} Hotel. Wszystkie prawa zastrzeżone.
                     </Typography>
                 </Box>
             </Container>

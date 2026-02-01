@@ -2,7 +2,7 @@ import {
     Card, CardActionArea, CardMedia, CardContent,
     Typography, Chip, Box
 } from '@mui/material';
-import { People, Euro } from '@mui/icons-material';
+import { People, Wallet } from '@mui/icons-material';
 import type { RoomType } from '../../models/RoomType';
 import { useNavigate } from 'react-router-dom';
 import {formatRoomName, getRoomImage} from "../../utils/room.utils.ts";
@@ -43,7 +43,7 @@ export default function RoomTypeCard({ room }: Props) {
 
                     <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
                         <Chip icon={<People />} label={`${room.capacity} os.`} color="primary" size="small" />
-                        <Chip icon={<Euro />} label={`${room.pricePerNight} zł`} color="success" size="small" />
+                        <Chip icon={< Wallet />} label={`${room.pricePerNight} zł`} color="success" size="small" />
                     </Box>
 
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>

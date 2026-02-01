@@ -1,4 +1,5 @@
 import React from 'react';
+import hotelBg from '../assets/hotel-background.jpg';
 import {
     Box,
     Button,
@@ -8,7 +9,6 @@ import {
     Paper,
     Divider,
     Link,
-    IconButton,
     useTheme,
     useMediaQuery,
 } from '@mui/material';
@@ -16,9 +16,6 @@ import {
     Hotel as HotelIcon,
     Restaurant as RestaurantIcon,
     Spa as SpaIcon,
-    Phone as PhoneIcon,
-    Email as EmailIcon,
-    LocationOn as LocationIcon,
 } from '@mui/icons-material';
 
 export default function HomePage() {
@@ -32,7 +29,7 @@ export default function HomePage() {
                 sx={{
                     position: 'relative',
                     height: { xs: '80vh', md: '100vh' },
-                    backgroundImage: 'ur[](https://images.unsplash.com/photo-1611892441792-ae6af465f35c?q=80&w=2070)',
+                    backgroundImage: `url(${hotelBg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     display: 'flex',
@@ -144,7 +141,7 @@ export default function HomePage() {
                         Twój dom z dala od domu
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 5, fontSize: '1.1rem', lineHeight: 1.8 }}>
-                        Hotel Paradise to idealne miejsce na romantyczny weekend, rodzinny wypoczynek lub firmową konferencję.
+                        Hotel to idealne miejsce na romantyczny weekend, rodzinny wypoczynek lub firmową konferencję.
                         Położony w malowniczej okolicy, zaledwie 2 godziny od Warszawy, oferuje ciszę, komfort i obsługę na najwyższym poziomie.
                     </Typography>
                     <Button
@@ -175,11 +172,11 @@ export default function HomePage() {
                         ul. Leśna 12, 00-123 Mazury
                         <br />
                         Telefon: <Link href="tel:+48123456789" color="inherit" underline="none">+48 123 456 789</Link> |
-                        E-mail: <Link href="mailto:recepcja@hotelparadise.pl" color="inherit" underline="none">recepcja@hotelparadise.pl</Link>
+                        E-mail: <Link href="mailto:recepcja@hotel.pl" color="inherit" underline="none">recepcja@hotel.pl</Link>
                     </Typography>
                     <Divider sx={{ bgcolor: 'grey.700', width: 100, mx: 'auto', my: 3 }} />
                     <Typography variant="caption" color="grey.500">
-                        © 2025 Hotel Paradise. Wszystkie prawa zastrzeżone.
+                        © 2025 Hotel. Wszystkie prawa zastrzeżone.
                     </Typography>
                 </Container>
             </Box>

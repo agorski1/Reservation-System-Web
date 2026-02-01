@@ -10,11 +10,11 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Header />                 {/* Teraz jest na każdej stronie */}
+            <Header />
             <Box component="main" sx={{ flexGrow: 1 }}>
                 {children}
             </Box>
-            <Footer />                 {/* Stopka też jest zawsze */}
+            <Footer />
         </Box>
     );
 }

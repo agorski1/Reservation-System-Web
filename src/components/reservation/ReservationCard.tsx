@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import type { UserReservation } from '../../models/UserReservation';
 
 const STATUS_TRANSLATIONS: Record<string, string> = {
-  Pending: 'Oczekująca',
-  'Partial-Paid': 'Częściowo opłacona',
-  Paid: 'Opłacona',
-  Cancelled: 'Anulowana',
-  Rejected: 'Odrzucona',
-  Completed: 'Zakończona',
+    Pending: 'Oczekująca',
+    Confirmed: 'Potwierdzona',
+    Cancelled: 'Anulowana',
+    Rejected: 'Odrzucona',
+    Completed: 'Zakończona',
+    'Partial-Paid': 'Częściowo opłacona',
+    Paid: 'Opłacona',
 };
 
 type Props = {
@@ -23,7 +24,7 @@ export default function ReservationCard({ reservation: res, onCancel, isCancelli
   const navigate = useNavigate();
 
   const canCancel = !['Cancelled', 'Rejected', 'Completed'].includes(res.status);
-  const isFullyPaid = res.remainingAmount <= 0;
+    const showPaymentInfo = !['Cancelled', 'Rejected'].includes(res.status);
 
   const handlePay = () => {
     navigate(`/payment/${res.reservationId}`);
@@ -47,38 +48,40 @@ export default function ReservationCard({ reservation: res, onCancel, isCancelli
         </Box>
 
         <Stack alignItems="flex-end" spacing={2}>
-          <Chip
-            label={STATUS_TRANSLATIONS[res.status] || res.status}
-            color={
-              isFullyPaid
-                ? 'success'
-                : res.status === 'Cancelled'
-                ? 'default'
-                : res.status === 'Partial-Paid'
-                ? 'warning'
-                : 'primary'
-            }
-            size="medium"
-          />
+            <Chip
+                label={STATUS_TRANSLATIONS[res.status] || res.status}
+                color={
+                    ['Cancelled', 'Rejected'].includes(res.status)
+                        ? 'default'
+                        : res.status === 'Paid'
+                            ? 'success'
+                            : res.status === 'Partial-Paid'
+                                ? 'warning'
+                                : 'primary'
+                }
+                size="medium"
+            />
 
-          <Box textAlign="right">
-            <Typography variant="body2">
-              Cena całkowita: <strong>{res.totalPrice.toFixed(2)} zł</strong>
-            </Typography>
-            <Typography variant="body2">
-              Zapłacono: <strong style={{ color: 'green' }}>{res.paidAmount.toFixed(2)} zł</strong>
-            </Typography>
+            {showPaymentInfo && (
+                <Box textAlign="right">
+                    <Typography variant="body2">
+                        Cena całkowita: <strong>{res.totalPrice.toFixed(2)} zł</strong>
+                    </Typography>
+                    <Typography variant="body2">
+                        Zapłacono: <strong style={{ color: 'green' }}>{res.paidAmount.toFixed(2)} zł</strong>
+                    </Typography>
 
-            {res.remainingAmount > 0 ? (
-              <Typography variant="h6" fontWeight="bold" color="error">
-                Pozostało: {res.remainingAmount.toFixed(2)} zł
-              </Typography>
-            ) : (
-              <Typography variant="h6" fontWeight="bold" color="success">
-                Opłacona w całości
-              </Typography>
+                    {res.remainingAmount > 0 ? (
+                        <Typography variant="h6" fontWeight="bold" color="error">
+                            Pozostało: {res.remainingAmount.toFixed(2)} zł
+                        </Typography>
+                    ) : (
+                        <Typography variant="h6" fontWeight="bold" color="success">
+                            Opłacona w całości
+                        </Typography>
+                    )}
+                </Box>
             )}
-          </Box>
 
           <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
             {res.remainingAmount > 0 && (

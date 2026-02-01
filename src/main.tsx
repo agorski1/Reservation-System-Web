@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <QueryClientProvider client={queryClient}>   {/* ← tutaj */}
+            <QueryClientProvider client={queryClient}>   {}
                 <AuthProvider>
                     <BrowserRouter>
                         <App />

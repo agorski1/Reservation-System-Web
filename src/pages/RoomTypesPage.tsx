@@ -21,7 +21,7 @@ export default function RoomTypesPage() {
                 Wybierz idealny typ pokoju
             </Typography>
 
-            {/* Zamiast Grid – Box z flex */}
+            {}
             <Box
                 sx={{
                     display: 'grid',

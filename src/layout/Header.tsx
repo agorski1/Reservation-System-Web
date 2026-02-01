@@ -62,7 +62,7 @@ export default function Header() {
                         >
                             <HotelIcon sx={{ fontSize: 32, color: 'primary.main' }} />
                             <Typography variant="h5" fontWeight="bold" sx={{ color: 'primary.main' }}>
-                                Hotel Paradise
+                                Hotel
                             </Typography>
                         </Box>
 
