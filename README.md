@@ -1,73 +1,177 @@
-# React + TypeScript + Vite
+# Hotel Reservation System – Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
 
-Currently, two official plugins are available:
+This module is a **web application for customers**, built with React. It is part of a complete hotel reservation system.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The system consists of three main parts:
 
-## React Compiler
+* **Backend (Spring Boot)** – Spring Boot REST API
+* **Web Application (this repository)** – client interface for customers
+* **Desktop Application (JavaFX)** – internal management tool for employees
+### 🔗 Related Repositories
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* 🌐 Web (React) – *customer-facing application*  
+  👉 [Reservation System Web](https://github.com/agorski1/Reservation-System-Web)
 
-## Expanding the ESLint configuration
+* 🖥 Desktop (JavaFX) – *employee management system*  
+  👉 [Reservation System Desktop](https://github.com/agorski1/Reservation-System-Desktop)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The web application allows customers to:
+* browse available rooms
+* make reservations
+* view and manage their bookings
+* cancel reservations
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🛠 Tech Stack
+
+* React 19
+* TypeScript
+* Vite
+* Material UI (MUI)
+* React Router
+* React Query (TanStack Query)
+* Axios
+* date-fns
+
+---
+
+## 🌐 Features
+
+* 🔍 Browse available rooms
+* 🛏 Create reservations
+* 📅 View current and past reservations
+* ❌ Cancel reservations
+* ⚡ Fast data fetching with React Query
+* 🎨 Modern UI with Material UI
+
+---
+
+## 🏗 Architecture
+
+The project follows a modular frontend architecture:
+
+* **pages** – main application views
+* **components** – reusable UI components
+* **services** – API communication layer
+* **models** – TypeScript types/interfaces
+* **context** – global state (e.g. auth)
+* **router** – application routing
+* **utils** – helper functions
+* **constants** – shared constants
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Node.js (>= 18 recommended)
+* npm or yarn
+* Running backend service
+
+---
+
+## ▶️ Running the Application
+
+```bash id="web1"
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Application will be available at:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```id="web2"
+http://localhost:5173
 ```
+
+---
+
+## ⚙️ Configuration
+
+The application communicates with the backend API.
+
+Default backend URL:
+
+```id="web3"
+http://localhost:8080
+```
+
+If needed, update the base URL in:
+
+```id="web4"
+src/services/api.ts
+```
+
+---
+
+## 📡 Backend Integration
+
+The web application consumes REST endpoints such as:
+
+### 🛏 Reservations
+
+* `GET /reservations/my`
+* `GET /reservations/my/current`
+* `POST /reservations`
+* `PATCH /reservations/{reservationId}/cancel`
+
+---
+
+### 🛏 Rooms
+
+* `GET /rooms/available`
+
+---
+
+### 🧾 Room Types
+
+* `GET /room-type`
+* `GET /room-type/{id}`
+* `GET /room-type/available`
+
+---
+
+## 📂 Project Structure
+
+```plaintext id="web6"
+src
+├── assets          # static files (images, etc.)
+├── components      # reusable UI components
+│   ├── filters
+│   ├── payment
+│   ├── reservation
+│   └── room
+├── pages           # application views
+├── services        # API layer (Axios)
+├── models          # TypeScript interfaces
+├── context         # global state management
+├── router          # routing configuration
+├── utils           # helper functions
+└── constants       # shared constants
+```
+
+---
+
+## 🔄 Data Fetching
+
+The application uses **React Query** for:
+
+* server state management
+* caching
+* background updates
+* request deduplication
+
+---
+
+## ⚠️ Notes
+
+* Backend must be running before starting the app
+* Application is designed for end users (customers)
+* Uses REST API for all operations
+
+---

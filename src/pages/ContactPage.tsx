@@ -105,29 +105,7 @@ const ContactPage: React.FC = () => {
                         </Stack>
                     </Box>
 
-                    <Divider sx={{ my: 6 }} />
 
-                    {/* Formularz */}
-                    <Typography variant="h6" gutterBottom textAlign="center" sx={{ mb: 4 }}>
-                        lub wyślij wiadomość
-                    </Typography>
-
-                    <Box component="form" onSubmit={handleSubmit} noValidate>
-                        <TextField fullWidth label="Imię i nazwisko" name="name" value={formData.name} onChange={handleChange} required sx={{ mb: 3 }} />
-                        <TextField fullWidth label="Adres e-mail" name="email" type="email" value={formData.email} onChange={handleChange} required sx={{ mb: 3 }} />
-                        <TextField fullWidth label="Wiadomość" name="message" multiline rows={7} value={formData.message} onChange={handleChange} required sx={{ mb: 4 }} />
-
-                        <Box textAlign="center">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                size="large"
-                                sx={{ minWidth: 240, py: 1.8, fontSize: '1.1rem', borderRadius: 3, textTransform: 'none' }}
-                            >
-                                Wyślij wiadomość
-                            </Button>
-                        </Box>
-                    </Box>
                 </Paper>
             </Box>
         </Container>
